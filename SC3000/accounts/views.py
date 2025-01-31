@@ -8,7 +8,7 @@ from django.views.generic import TemplateView
 
 class UserLoginView(LoginView):
     template_name = "accounts/login.html"
-
+    redirect_field_name = "accounts/profile.html"
     def form_valid(self, form):
         messages.success(self.request, f"Welcome {self.request.user.username}!")
         return super().form_valid(form)
