@@ -1,4 +1,6 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %} {% block script %} {{ block.super }}
+<script></script>
+{% endblock %} {% block content %}
 <div class="profile-container">
   <h2>My Profile</h2>
   <p><strong>Username:</strong> {{ user.username }}</p>
