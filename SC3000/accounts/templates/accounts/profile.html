@@ -5,7 +5,5 @@
   <p><strong>Email:</strong> {{ user.email }}</p>
   <p><strong>First Name:</strong> {{ user.first_name|default:"Not set" }}</p>
   <p><strong>Last Name:</strong> {{ user.last_name|default:"Not set" }}</p>
-
-  {% comment %} <a href="{% url 'logout' %}">Logout</a> {% endcomment %}
 </div>
 {% endblock %}
