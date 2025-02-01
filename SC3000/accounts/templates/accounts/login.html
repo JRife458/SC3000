@@ -1,9 +1,17 @@
 {% extends "base.html" %} {% block content %}
-<div class="login-container">
+<script>
+  const demoLogin = () => {
+    document.getElementById("id_username").value = "Test User";
+    document.getElementById("id_password").value = "test";
+    document.getElementById("login-form").submit();
+  };
+</script>
+<div>
   <h2>Login</h2>
-  <form method="post">
+  <form method="post" id="login-form">
     {% csrf_token %} {{ form.as_p }}
     <button type="submit">Login</button>
+    <button type="button" onclick="demoLogin()">Demo User</button>
   </form>
   <p>Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
 </div>
