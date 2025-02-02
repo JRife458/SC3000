@@ -1,69 +1,25 @@
 {% extends "base.html" %} {% block content %}
-<script type="module">
-  document.addEventListener("DOMContentLoaded", function () {
-    fetch("https://statsapi.mlb.com/api/v1/teams")
-      .then((response) => response.json())
-      .then((data) => {
-        const teamSelect = document.getElementById("team-select-form");
-        data.teams.forEach((team) => {
-          const option = document.createElement("option");
-          option.innerHTML = team.name;
-          option.value = team.name;
-          teamSelect.appendChild(option);
-        });
-        const loadingOption = document.getElementById("default-team-option");
-        loadingOption.remove();
-      })
-      .catch((error) => {
-        console.error("Error fetching teams:", error);
-      });
-  });
-</script>
-<script>
-  function getSelectValues(select) {
-    const result = [];
-    const options = select && select.options;
-    for (let i = 0; i < options.length; i++) {
-      const opt = options[i];
-
-      if (opt.selected) {
-        result.push(opt.value);
-      }
-    }
-    return result;
-  }
-</script>
-<script>
-  const submitTeams = () => {
-    const teamSelect = document.getElementById("team-select-form");
-    const values = getSelectValues(teamSelect);
-    const joined = values.join(",");
-    const bod = { user_id: {{user.id}}, teams: joined }
-    console.log(bod)
-    const response = fetch("http://127.0.0.1:8000/accounts/favTeams/", {
-       headers: {
-        "Content-Type": "application/json"},
-      method: "POST",
-      body: JSON.stringify({ user_id: {{user.id}}, teams: joined }),
-    });
-    location.reload()
-  };
-</script>
 <div class="profile-container">
   <h2>My Profile</h2>
   <p><strong>Username:</strong> {{ user.username }}</p>
   <p><strong>Email:</strong> {{ user.email }}</p>
   <p><strong>First Name:</strong> {{ user.first_name|default:"Not set" }}</p>
   <p><strong>Last Name:</strong> {{ user.last_name|default:"Not set" }}</p>
-  <p><strong>Favorite Teams:</strong> {{ favorite_teams.teams }}</p>
+  <p><strong>Favorite Teams:</strong></p>
+  <ul>
+    {%for team in favorite_teams%}
+    <li>{{team}}</li>
+    {%endfor%}
+  </ul>
 </div>
 
 <div>
   <h3>Select Favorite Teams</h3>
-  <select id="team-select-form" class="form-select" multiple>
-    <option id="default-team-option" value="">Loading Teams</option>
-  </select>
-  <button onclick="submitTeams()">Submit</button>
+  <p>Hold ctrl to select multiple</p>
+  <form method="post">
+    {% csrf_token %} {{ form.as_p }}
+    <button type="submit">Submit</button>
+  </form>
 </div>
 
 {% endblock %}
