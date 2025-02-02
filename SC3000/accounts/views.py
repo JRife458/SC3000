@@ -1,11 +1,15 @@
 from django.contrib.auth.views import LoginView
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django.contrib import messages
+from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView, DetailView
+from django.views.decorators.csrf import csrf_exempt
 from .forms import CustomUserCreationForm
+from .models import FavoriteTeams
+import json
 
 class UserLoginView(LoginView):
     template_name = "accounts/login.html"
@@ -33,3 +37,19 @@ class UserSignupView(CreateView):
 
 class UserProfileView(LoginRequiredMixin, TemplateView):
     template_name = "accounts/profile.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context["favorite_teams"] = FavoriteTeams.objects.get(user_id=user.id)
+        return context
+
+@csrf_exempt
+def favorite_team_view(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        print(data)
+        new_teams = FavoriteTeams.objects.create(user_id=data["user_id"], teams=data["teams"])
+        return JsonResponse({"new_teams": new_teams})
+    else:
+        return JsonResponse({"message": "post-fave-teams"})
