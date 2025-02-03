@@ -28,7 +28,6 @@ class FavoriteTeamsForm(forms.ModelForm):
 
     def save(self, user, commit=True):
         selected_teams = self.cleaned_data['teams']
-        print("here")
         Favorite_Teams.objects.filter(user=user).delete()
         Favorite_Teams.objects.bulk_create(
             [Favorite_Teams(user=user, team=team) for team in selected_teams]

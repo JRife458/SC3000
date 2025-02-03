@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block content %} {% load django_bootstrap5 %}
 <div class="container d-flex flex-column align-items-center">
-  <h2>My Profile</h2>
+  <h1 class="display-1">My Profile</h1>
   <p><strong>Username:</strong> {{ user.username }}</p>
   <p><strong>Email:</strong> {{ user.email }}</p>
   <p><strong>First Name:</strong> {{ user.first_name|default:"Not set" }}</p>
@@ -15,7 +15,7 @@
 
 <div class="container d-flex flex-column align-items-center">
   <h3>Select Favorite Teams</h3>
-  <p>Hold ctrl to select multiple</p>
+  <p class="text-muted">Hold ctrl to select multiple</p>
   <form method="post" class="form col">
     {% csrf_token %}
     {% for field in form %}
