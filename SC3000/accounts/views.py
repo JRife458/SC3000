@@ -95,11 +95,16 @@ class TeamGamesView(LoginRequiredMixin, TemplateView):
             for events in plays:
                 result = events["result"]
                 highlights.append(result)
+            if highlights:
+                last_score = highlights[-1]
+                score = game_obj["score"]
+                score["home"] = last_score["homeScore"]
+                score["away"] = last_score["awayScore"]
+            else:
+                score["home"] = 0
+                score["away"] = 0
+                highlights.append({"description":"Game cancelled.", "homeScore": 0, "awayScore": 0})
             game_obj["plays"] = highlights
-            last_score = highlights[-1]
-            score = game_obj["score"]
-            score["home"] = last_score["homeScore"]
-            score["away"] = last_score["awayScore"]
             games.append(game_obj)
 
 

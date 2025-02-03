@@ -1,10 +1,10 @@
 {% extends "base.html" %} {% block content %}
-<div>
-  <h2>Game Select</h2>
-  <p><strong>Favorite Teams:</strong></p>
-  <ul>
+<div class="container d-flex flex-column align-items-center">
+  <h1 class="display-1">Game Select</h1>
+  <h2>Favorite Teams:</h2>
+  <ul class="list-group-flush">
     {%for team in favorite_teams%}
-    <li>{{team}}</li>
+    <li class="list-group-item">{{team}}</li>
     {%endfor%}
   </ul>
 
