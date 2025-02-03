@@ -15,7 +15,7 @@ import statsapi
 
 class UserLoginView(LoginView):
     template_name = "accounts/login.html"
-    redirect_field_name = "accounts/profile.html"
+    success_url = reverse_lazy("profile")
     def form_valid(self, form):
         messages.success(self.request, f"Welcome {self.request.user.username}!")
         return super().form_valid(form)
@@ -75,7 +75,7 @@ class TeamGamesView(LoginRequiredMixin, TemplateView):
         context["favorite_teams"] = fav_teams
         game_data = []
         for team in fav_teams:
-            team_obj = Teams.objects.get(id=team.id)
+            team_obj = Teams.objects.get(id=team.team_id)
             game_id = statsapi.last_game(team_obj.mlb_id)
             highlight_data = statsapi.game_scoring_play_data(game_id)
             game_data.append(highlight_data)
