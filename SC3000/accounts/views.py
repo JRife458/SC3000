@@ -73,12 +73,19 @@ class TeamGamesView(LoginRequiredMixin, TemplateView):
         user = self.request.user
         fav_teams = Favorite_Teams.objects.filter(user_id=user.id)
         context["favorite_teams"] = fav_teams
-        # data = requests.get("https://statsapi.mlb.com/api/v1/schedule?sportId=1&season=2024&gameType=R")
         game_data = []
         for team in fav_teams:
             team_obj = Teams.objects.get(id=team.id)
             game_id = statsapi.last_game(team_obj.mlb_id)
-            highlights = statsapi.game_highlight_data(game_id)
-            game_data.append(highlights)
+            highlight_data = statsapi.game_scoring_play_data(game_id)
+            game_data.append(highlight_data)
+        games = []
+        for game in game_data:
+            highlights= []
+            plays = game["plays"]
+            for events in plays:
+                result = events["result"]
+                highlights.append(result)
+            game["plays"] = highlights
         context["games"] = game_data
         return context

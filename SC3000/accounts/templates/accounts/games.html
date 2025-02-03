@@ -7,10 +7,20 @@
     <li>{{team}}</li>
     {%endfor%}
   </ul>
+
+  {%for game in games%}
   <ul>
-    {%for game in games%}
-    <li>{{game}}</li>
+    <h3>Game</h3>
+    <h6>Home Team: {{game.home.name}}</h6>
+    <h6>Away Team: {{game.away.name}}</h6>
+    {%for events in game.plays%}
+    <li>
+      {{events.description}} <strong>Home:</strong> {{events.homeScore}}
+      <strong>Away:</strong>
+      {{events.awayScore}}
+    </li>
     {%endfor%}
   </ul>
+  {%endfor%}
 </div>
 {% endblock %}
