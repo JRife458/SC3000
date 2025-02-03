@@ -14,7 +14,7 @@ class Command(BaseCommand):
         for user in User.objects.all():
             user.set_password(user.password)
             user.save()
-        data = requests.get("https://statsapi.mlb.com/api/v1/teams")
+        data = requests.get("https://statsapi.mlb.com/api/v1/teams?sportId=1")
         json_data = data.json()
         teams = json_data["teams"]
         for team in teams:

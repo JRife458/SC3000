@@ -1,0 +1,16 @@
+{% extends "base.html" %} {% block content %}
+<div>
+  <h2>Game Select</h2>
+  <p><strong>Favorite Teams:</strong></p>
+  <ul>
+    {%for team in favorite_teams%}
+    <li>{{team}}</li>
+    {%endfor%}
+  </ul>
+  <ul>
+    {%for game in games%}
+    <li>{{game}}</li>
+    {%endfor%}
+  </ul>
+</div>
+{% endblock %}

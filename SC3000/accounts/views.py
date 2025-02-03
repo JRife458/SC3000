@@ -10,6 +10,8 @@ from django.views.decorators.csrf import csrf_exempt
 from .forms import CustomUserCreationForm, FavoriteTeamsForm
 from .models import Favorite_Teams, Teams
 import json
+import requests
+import statsapi
 
 class UserLoginView(LoginView):
     template_name = "accounts/login.html"
@@ -63,12 +65,20 @@ class UserProfileView(LoginRequiredMixin, FormView):
         messages.error(self.request, "Error saving teams. Please check the form.")
         return super().form_invalid(form)
 
-# @csrf_exempt
-# def favorite_team_view(request):
-#     if request.method == "POST":
-#         data = json.loads(request.body)
-#         print(data)
-#         # new_teams = FavoriteTeams.objects.create(user_id=data["user_id"], teams=data["teams"])
-#         return JsonResponse({"new_teams": "new_teams"})
-#     else:
-#         return JsonResponse({"message": "post-fave-teams"})
+class TeamGamesView(LoginRequiredMixin, TemplateView):
+    template_name = "accounts/games.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        fav_teams = Favorite_Teams.objects.filter(user_id=user.id)
+        context["favorite_teams"] = fav_teams
+        # data = requests.get("https://statsapi.mlb.com/api/v1/schedule?sportId=1&season=2024&gameType=R")
+        game_data = []
+        for team in fav_teams:
+            team_obj = Teams.objects.get(id=team.id)
+            game_id = statsapi.last_game(team_obj.mlb_id)
+            highlights = statsapi.game_highlight_data(game_id)
+            game_data.append(highlights)
+        context["games"] = game_data
+        return context
