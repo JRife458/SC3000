@@ -7,13 +7,15 @@
 </head>
 <body>
     <h1>Welcome to the AI Sportcaster Test Page</h1>
-    <form method="post">
+    {% comment %} <form method="post">
         {% csrf_token %}
         <input type="text" id="prompt" placeholder="Enter your prompt here">
         <button type="button" onclick="callSummarize()">Summarize</button>
-    </form>
-    <div id="result"></div>
-    <script>
+    </form> {% endcomment %}
+    <div id="result">
+        <p>{{summary}}
+    </div>
+    {% comment %} <script>
         function callSummarize() {
             const prompt = document.getElementById("prompt").value;
             const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -31,6 +33,6 @@
             })
             .catch(error => console.error('Error:', error));
         }
-    </script>
+    </script> {% endcomment %}
 </body>
 </html>
