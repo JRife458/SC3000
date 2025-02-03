@@ -1,0 +1,36 @@
+<!-- ai_sportcaster/templates/ai_sportcaster/test_ai.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test AI Page</title>
+</head>
+<body>
+    <h1>Welcome to the AI Sportcaster Test Page</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" id="prompt" placeholder="Enter your prompt here">
+        <button type="button" onclick="callSummarize()">Summarize</button>
+    </form>
+    <div id="result"></div>
+    <script>
+        function callSummarize() {
+            const prompt = document.getElementById("prompt").value;
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            fetch('/ai/summarize/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': csrfToken
+                },
+                body: 'prompt=' + encodeURIComponent(prompt)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerText = data.summary || data.error;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
