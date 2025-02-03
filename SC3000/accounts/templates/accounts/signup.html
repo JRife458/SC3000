@@ -1,9 +1,11 @@
-{% extends "base.html" %} {% block content %}
-<div class="login-container">
+{% extends "base.html" %}
+{% block content %}
+{% load django_bootstrap5 %}
+<div class="container">
   <h2>Sign up</h2>
   <form method="post">
-    {% csrf_token %} {{ form.as_p }}
-    <button type="submit">Sign up</button>
+    {% csrf_token %} {% bootstrap_form form layout="floating"%}
+    {% bootstrap_button "Login" button_type="submit" button_class="btn-primary"%}
   </form>
   <p>Have an account? <a href="{% url 'login' %}">Login</a></p>
 </div>

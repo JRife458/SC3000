@@ -1,4 +1,6 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
+{% block content %}
+{% load django_bootstrap5 %}
 <script>
   const demoLogin = () => {
     document.getElementById("id_username").value = "Test User";
@@ -6,13 +8,14 @@
     document.getElementById("login-form").submit();
   };
 </script>
-<div>
+<div class="container">
   <h2>Login</h2>
   <form method="post" id="login-form">
-    {% csrf_token %} {{ form.as_p }}
-    <button type="submit">Login</button>
+    {% csrf_token %}
+    {% bootstrap_form form layout="floating"%}
+    {% bootstrap_button "Login" button_type="submit" button_class="btn-primary"%}
     <button type="button" onclick="demoLogin()">Demo User</button>
   </form>
   <p>Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
 </div>
-{% endblock %}
+{% endblock content %}

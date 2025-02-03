@@ -1,5 +1,5 @@
-{% extends "base.html" %} {% block content %}
-<div class="profile-container">
+{% extends "base.html" %} {% block content %} {% load django_bootstrap5 %}
+<div class="container d-flex flex-column align-items-center">
   <h2>My Profile</h2>
   <p><strong>Username:</strong> {{ user.username }}</p>
   <p><strong>Email:</strong> {{ user.email }}</p>
@@ -7,18 +7,21 @@
   <p><strong>Last Name:</strong> {{ user.last_name|default:"Not set" }}</p>
   <p><strong>Favorite Teams:</strong></p>
   <ul>
-    {%for team in favorite_teams%}
-    <li>{{team}}</li>
-    {%endfor%}
+    {% for team in favorite_teams %}
+    <li> {{team}} </li>
+    {% endfor %}
   </ul>
 </div>
 
-<div>
+<div class="container d-flex flex-column align-items-center">
   <h3>Select Favorite Teams</h3>
   <p>Hold ctrl to select multiple</p>
-  <form method="post">
-    {% csrf_token %} {{ form.as_p }}
-    <button type="submit">Submit</button>
+  <form method="post" class="form col">
+    {% csrf_token %}
+    {% for field in form %}
+      {% bootstrap_field field%}
+    {% endfor %}
+    {% bootstrap_button "Save" button_type="submit" button_class="btn-primary"%}
   </form>
 </div>
 
