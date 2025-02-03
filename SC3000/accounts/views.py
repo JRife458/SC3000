@@ -81,11 +81,27 @@ class TeamGamesView(LoginRequiredMixin, TemplateView):
             game_data.append(highlight_data)
         games = []
         for game in game_data:
+            game_obj = {
+                "home": game["home"],
+                "away": game["away"],
+                "plays": [],
+                "score": {
+                    "home": "",
+                    "away": "",
+                }
+            }
             highlights= []
             plays = game["plays"]
             for events in plays:
                 result = events["result"]
                 highlights.append(result)
-            game["plays"] = highlights
-        context["games"] = game_data
+            game_obj["plays"] = highlights
+            last_score = highlights[-1]
+            score = game_obj["score"]
+            score["home"] = last_score["homeScore"]
+            score["away"] = last_score["awayScore"]
+            games.append(game_obj)
+
+
+        context["games"] = games
         return context

@@ -11,8 +11,8 @@
   {%for game in games%}
   <ul>
     <h3>Game</h3>
-    <h6>Home Team: {{game.home.name}}</h6>
-    <h6>Away Team: {{game.away.name}}</h6>
+    <h6>Home Team: {{game.home.name}} {{game.score.home}}</h6>
+    <h6>Away Team: {{game.away.name}} {{game.score.away}}</h6>
     {%for events in game.plays%}
     <li>
       {{events.description}} <strong>Home:</strong> {{events.homeScore}}
