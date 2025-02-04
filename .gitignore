@@ -5,3 +5,4 @@ venv/
 /__pycache__/*
 SC3000/db.sqlite3
 google_api.json
+*.mp3
