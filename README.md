@@ -54,7 +54,9 @@ pip install -r requirements.txt
 
 python manage.py migrate
 
-## Create .env following .envtemplate. Will need to provide your own Google credentials.
+## Create .env following .envtemplate.
+
+Will need to provide your own Google credentials.
 
 ### Optional
 
