@@ -1,4 +1,5 @@
 # Sportscaster3000
+![image](https://rollingferret.github.io/assets/myfiles/mlbgooglehackathon.png)
 
 **Sportscaster3000** is a Django web application that summarizes recent games of your favorite teams using Google's Gemini AI and Google Text-to-Speech. It delivers concise game summaries and audio commentary powered by state-of-the-art AI technologies and is enriched with real-time statistics from MLB's Stats API.
 
