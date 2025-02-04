@@ -42,8 +42,20 @@ class FavoriteTeamsForm(forms.ModelForm):
                 'language': 'EN',
             })
             self.fields['language'].initial = language_preference.language
-            self.fields['teams'].initial = Favorite_Teams.objects.filter(user=user).values_list('team', flat=True)
+            # Handle favorite teams with default fallback
+            favorite_teams = Favorite_Teams.objects.filter(user=user)
+            
+            if not favorite_teams.exists():
+                # Get default team (example: first team in database)
+                default_team = Team.objects.first()
+                
+                if default_team:
+                    # Create a default favorite team relationship
+                    Favorite_Teams.objects.create(user=user, team=default_team)
+                    favorite_teams = Favorite_Teams.objects.filter(user=user)
 
+            # Set initial values (now guaranteed to have at least one if teams exist)
+            self.fields['teams'].initial = favorite_teams.values_list('team', flat=True)
 
     def save(self, user, commit=True):
         selected_teams = self.cleaned_data['teams']
