@@ -118,7 +118,7 @@ class TeamGamesView(LoginRequiredMixin, TemplateView):
         context["games"] = games
         summary = get_gemini_summary(f"{games}", language_pref, user.first_name)
         context["summary"] = summary
-        filename = text_to_speech(summary, output_filename="summary_audio.mp3")
+        filename = text_to_speech(summary, language_pref, output_filename="summary_audio.mp3")
         audio_url = f"{settings.MEDIA_URL}{filename}"
         context["audio"] = audio_url
         return context

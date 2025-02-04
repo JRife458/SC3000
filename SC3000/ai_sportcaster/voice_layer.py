@@ -3,7 +3,7 @@ from google.cloud import texttospeech
 from django.conf import settings
 from decouple import config
 
-def text_to_speech(text: str, output_filename="summary_audio.mp3") -> str:
+def text_to_speech(text: str, lang: str, output_filename="summary_audio.mp3") -> str:
     if config("ENVIRONMENT", default="prod") == 'dev':
         env_value = config("GOOGLE_APPLICATION_CREDENTIALS")
         os.environ.setdefault("GOOGLE_APPLICATION_CREDENTIALS", env_value)
@@ -28,9 +28,19 @@ def text_to_speech(text: str, output_filename="summary_audio.mp3") -> str:
 
     # 2. Build the synthesis request
     synthesis_input = texttospeech.SynthesisInput(text=text)
+    LANGUAGE_CODE_CHOICES = {
+    "EN": "en-AU",
+    "JP": "ja-JP",
+    "SP": "es-US"
+    }
+    LANGUAGE_NAME_CHOICES = {
+    "EN": "en-AU-Polyglot-1",
+    "JP": "ja-JP-Neural2-D",
+    "SP": "es-US-News-E"
+    }
     voice = texttospeech.VoiceSelectionParams(
-        language_code="en-AU",
-        name="en-AU-Polyglot-1",
+        language_code=LANGUAGE_CODE_CHOICES[lang.language],
+        name=LANGUAGE_NAME_CHOICES[lang.language],
         ssml_gender=texttospeech.SsmlVoiceGender.MALE
     )
     audio_config = texttospeech.AudioConfig(

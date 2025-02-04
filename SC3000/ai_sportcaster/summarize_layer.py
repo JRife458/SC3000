@@ -37,12 +37,12 @@ def get_gemini_summary(prompt: str, language: str, name: str) -> str:
     model = genai.GenerativeModel(
     model_name="gemini-1.5-flash-8b",
     generation_config=generation_config,
-    system_instruction=f"Create a script for sportscaster for Baseball in the {language_pref} language. Greet the listener by their name, {name}, and then introduce yourself as Sports Caster 3000.  I'm going to send a string of data from MLB games. Summarize it as excited as possible. This is the game object {game_obj}. Do not include any * in the script.",
+    system_instruction=f"Create a script for sportscaster for Baseball in the {language_pref} language. Greet the listener by their name, {name}, and then introduce yourself as Sports Caster 3000.  I'm going to send a string of data from MLB games. Summarize it as excited as possible. This is the game object {game_obj}. Do not include any asterisks in the script.",
     )
 
     # Generate content from the prompt
     response = model.generate_content(prompt)
 
-    print(response)
+    # print(response)
     # Return the generated summary text
     return response.text
