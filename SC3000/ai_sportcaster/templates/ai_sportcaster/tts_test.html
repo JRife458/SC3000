@@ -60,7 +60,9 @@
         source.connect(analyser);
         analyser.connect(audioCtx.destination);
 
-        analyser.fftSize = 32;
+        analyser.fftSize = 256;
+        analyser.smoothingTimeConstant = 0.2;
+        
         const bufferLength = analyser.frequencyBinCount;
         const dataArray = new Uint8Array(bufferLength);
         const mouth = document.getElementById("avatar-mouth");
@@ -68,12 +70,15 @@
         function animate() {
             analyser.getByteFrequencyData(dataArray);
             const average = dataArray.reduce((a, b) => a + b) / bufferLength;
-
-            if (average > 50) {
-            mouth.classList.add("speaking");
-            } else {
-            mouth.classList.remove("speaking");
-            }
+        if (average > 35) {
+            mouth.style.height = '90px';
+        } else if (average > 20) {
+            mouth.style.height = '60px';
+        } else {
+            mouth.style.height = '45px';
+        }
+        
+        mouth.style.transition = 'height 0.05s ease'; // Faster transition
             requestAnimationFrame(animate);
         }
         animate();
