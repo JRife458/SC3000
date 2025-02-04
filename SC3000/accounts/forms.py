@@ -47,7 +47,7 @@ class FavoriteTeamsForm(forms.ModelForm):
             
             if not favorite_teams.exists():
                 # Get default team (example: first team in database)
-                default_team = Team.objects.first()
+                default_team = Teams.objects.first()
                 
                 if default_team:
                     # Create a default favorite team relationship
