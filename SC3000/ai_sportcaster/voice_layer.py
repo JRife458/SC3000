@@ -4,8 +4,9 @@ from django.conf import settings
 from decouple import config
 
 def text_to_speech(text: str, output_filename="summary_audio.mp3") -> str:
-    env_value = config("GOOGLE_APPLICATION_CREDENTIALS")
-    os.environ.setdefault("GOOGLE_APPLICATION_CREDENTIALS", env_value)
+    if os.environ.get("ENVIRONMENT", "dev") == "dev":
+        env_value = config("GOOGLE_APPLICATION_CREDENTIALS")
+        os.environ.setdefault("GOOGLE_APPLICATION_CREDENTIALS", env_value)
 
     # Print the values to see what's going on
     # print("Value from config('GOOGLE_APPLICATION_CREDENTIALS'):", env_value)
