@@ -46,6 +46,8 @@ def text_to_speech(text: str, output_filename="summary_audio.mp3") -> str:
     # 4. Build the absolute path to MEDIA_ROOT.
     file_path = os.path.join(settings.MEDIA_ROOT, output_filename)
 
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
     # 5. Write the audio content to that path.
     with open(file_path, "wb") as out:
         out.write(response.audio_content)
