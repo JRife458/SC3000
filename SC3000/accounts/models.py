@@ -17,3 +17,16 @@ class Favorite_Teams(models.Model):
 
     def __str__(self):
         return self.team.name
+
+class LanguagePreference(models.Model):
+    CHOICES = {
+    "EN": "English",
+    "JP": "Japanese",
+    "SP": "Spanish"
+    }
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    language = models.CharField(max_length=3, choices=CHOICES)

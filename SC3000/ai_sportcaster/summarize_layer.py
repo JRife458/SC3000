@@ -1,8 +1,10 @@
 import os
 import google.generativeai as genai
 from decouple import config  # Import config from decouple
+from django.contrib.auth.models import User
 
-def get_gemini_summary(prompt: str) -> str:
+
+def get_gemini_summary(prompt: str, language: str) -> str:
     """
     This function configures the Gemini AI model using your API key,
     sends a prompt to generate content, and returns the summary text.
@@ -25,10 +27,17 @@ def get_gemini_summary(prompt: str) -> str:
         "response_mime_type": "text/plain",
     }
 
+    game_obj = {'home': {},'away': {},'plays': [],'score': {'home': '','away': '',}}
+    CHOICES = {
+    "EN": "English",
+    "JP": "Japanese",
+    "SP": "Spanish"
+    }
+    language_pref = CHOICES[language.language]
     model = genai.GenerativeModel(
     model_name="gemini-1.5-flash-8b",
     generation_config=generation_config,
-    system_instruction="Act as a sportscaster. I'm going to send a string of data from MLB games. Summarize it as excited as possible. This is the game object game_obj = {'home': {},'away': {},'plays': [],'score': {'home': '','away': '',}}",
+    system_instruction=f"Act as a sportscaster in the {language_pref} language. I'm going to send a string of data from MLB games. Summarize it as excited as possible. This is the game object {game_obj}",
     )
 
     # Generate content from the prompt

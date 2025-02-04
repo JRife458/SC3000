@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from .summarize_layer import get_gemini_summary
-from accounts.models import Favorite_Teams, Teams
+from accounts.models import Favorite_Teams, Teams, LanguagePreference
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
@@ -72,7 +72,8 @@ class SummarizeGameView(LoginRequiredMixin, TemplateView):
             game_obj["plays"] = highlights
             games.append(game_obj)
         context["games"] = games
-        summary = get_gemini_summary(f"{games}")
+        language_pref = LanguagePreference.objects.get(user=user)
+        summary = get_gemini_summary(f"{games}", language_pref)
         context["summary"] = summary
 
         return context
