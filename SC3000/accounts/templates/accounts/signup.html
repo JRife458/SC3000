@@ -5,7 +5,7 @@
   <h2>Sign up</h2>
   <form method="post">
     {% csrf_token %} {% bootstrap_form form layout="floating"%}
-    {% bootstrap_button "Login" button_type="submit" button_class="btn-primary"%}
+    {% bootstrap_button "Login" button_type="submit" button_class="btn btn-outline-primary"%}
   </form>
   <p>Have an account? <a href="{% url 'login' %}">Login</a></p>
 </div>

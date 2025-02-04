@@ -1,14 +1,14 @@
 {% extends "base.html" %} {% block content %} {% load django_bootstrap5 %}
-<div class="container d-flex flex-column align-items-center">
+<div class="container d-flex flex-column align-items-center mb-3">
   <h1 class="display-1">My Profile</h1>
   <p><strong>Username:</strong> {{ user.username }}</p>
   <p><strong>Email:</strong> {{ user.email }}</p>
   <p><strong>First Name:</strong> {{ user.first_name|default:"Not set" }}</p>
   <p><strong>Last Name:</strong> {{ user.last_name|default:"Not set" }}</p>
-  <p><strong>Favorite Teams:</strong></p>
-  <ul>
+  <label><strong>Favorite Teams:</strong></label>
+  <ul class="list-group">
     {% for team in favorite_teams %}
-    <li> {{team}} </li>
+    <li class="list-group-item"> {{team}} </li>
     {% endfor %}
   </ul>
 </div>
