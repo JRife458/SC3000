@@ -1,12 +1,43 @@
-<!-- ai_sportcaster/templates/ai_sportcaster/tts_test.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Test Google Text-to-Speech</title>
+    <style>
+        .avatar-container {
+        width: 300px;
+        height: 300px;
+        position: relative;
+        margin: 20px auto;
+        background: url("https://api.dicebear.com/9.x/big-ears-neutral/svg")
+            no-repeat center;
+        background-size: contain;
+        }
+
+        #avatar-mouth {
+        width: 85px;
+        height: 45px;
+        background: #ff6b6b;
+        position: absolute;
+        left: 112px;
+        top: 202px;
+        border-radius: 20px;
+        transition: all 0.1s ease;
+        }
+
+        #avatar-mouth.speaking {
+        height: 90px;
+        border-radius: 15px;
+        }
+    </style>
 </head>
 <body>
     <h1>Google Text-to-Speech Test</h1>
+
+    <div class="avatar-container">
+        <div id="avatar-mouth"></div>
+    </div>
+
     <form method="POST" onsubmit="speakText(event)">
         {% csrf_token %}
         <label for="text-to-say">Enter text to speak:</label>
@@ -20,37 +51,66 @@
     <audio id="audio-player" controls></audio>
 
     <script>
+    function setupLipSync(audioElement) {
+        const audioCtx = new (window.AudioContext ||
+            window.webkitAudioContext)();
+        const analyser = audioCtx.createAnalyser();
+        const source = audioCtx.createMediaElementSource(audioElement);
+
+        source.connect(analyser);
+        analyser.connect(audioCtx.destination);
+
+        analyser.fftSize = 32;
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+        const mouth = document.getElementById("avatar-mouth");
+
+        function animate() {
+            analyser.getByteFrequencyData(dataArray);
+            const average = dataArray.reduce((a, b) => a + b) / bufferLength;
+
+            if (average > 50) {
+            mouth.classList.add("speaking");
+            } else {
+            mouth.classList.remove("speaking");
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+    }
+
     function speakText(event) {
         event.preventDefault(); // Prevent normal form submission
 
         // Gather form data
         const text = document.getElementById("text-to-say").value;
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
 
         // Make a POST request using fetch with the namespaced URL
         fetch("{% url 'ai_sportcaster:speak_text' %}", {
             method: "POST",
             headers: {
-                'X-CSRFToken': csrfToken,
-                'Content-Type': 'application/x-www-form-urlencoded'
+                "X-CSRFToken": csrfToken,
+                "Content-Type": "application/x-www-form-urlencoded",
             },
-            body: 'text=' + encodeURIComponent(text)
+            body: "text=" + encodeURIComponent(text),
         })
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
             console.log(data);
-            document.getElementById('response').innerText = data.message || data.error;
-            
+            document.getElementById("response").innerText = data.message || data.error;
+
             // Automatically play the audio if the audio_url is returned.
             if (data.audio_url) {
-                const audioPlayer = document.getElementById('audio-player');
+                const audioPlayer = document.getElementById("audio-player");
                 audioPlayer.src = data.audio_url;
                 audioPlayer.play();
+                setupLipSync(audioPlayer);
             }
         })
-        .catch(err => {
+        .catch((err) => {
             console.error(err);
-            document.getElementById('response').innerText = "An error occurred.";
+            document.getElementById("response").innerText = "An error occurred.";
         });
     }
     </script>
