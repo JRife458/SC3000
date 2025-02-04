@@ -8,7 +8,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, DetailView, FormView
 from django.views.decorators.csrf import csrf_exempt
 from .forms import CustomUserCreationForm, FavoriteTeamsForm
-from .models import Favorite_Teams, Teams
+from .models import Favorite_Teams, Teams, LanguagePreference
+from ai_sportcaster.voice_layer import text_to_speech
+from ai_sportcaster.summarize_layer import get_gemini_summary
+from django.conf import settings
 import json
 import requests
 import statsapi
@@ -107,7 +110,11 @@ class TeamGamesView(LoginRequiredMixin, TemplateView):
                 highlights.append({"description":"Game cancelled.", "homeScore": 0, "awayScore": 0})
             game_obj["plays"] = highlights
             games.append(game_obj)
-
-
         context["games"] = games
+        language_pref = LanguagePreference.objects.get(user=user)
+        summary = get_gemini_summary(f"{games}", language_pref)
+        context["summary"] = summary
+        filename = text_to_speech(summary, output_filename="summary_audio.mp3")
+        audio_url = f"{settings.MEDIA_URL}{filename}"
+        context["audio"] = audio_url
         return context
