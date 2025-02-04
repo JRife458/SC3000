@@ -12,7 +12,7 @@
 </script>
 <div class="container d-flex flex-column align-items-center">
   <h2>Login</h2>
-  <form method="post" id="login-form">
+  <form class="mb-3" method="post" id="login-form">
     {% csrf_token %}
     {% bootstrap_form form layout="floating"%}
     {% bootstrap_button "Login" button_type="submit" button_class="btn btn-outline-primary"%}
