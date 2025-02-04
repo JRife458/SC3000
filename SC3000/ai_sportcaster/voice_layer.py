@@ -4,7 +4,7 @@ from django.conf import settings
 from decouple import config
 
 def text_to_speech(text: str, output_filename="summary_audio.mp3") -> str:
-    if config("GOOGLE_APPLICATION_CREDENTIALS") == 'dev':
+    if config("ENVIRONMENT") == 'dev':
         env_value = config("GOOGLE_APPLICATION_CREDENTIALS")
         os.environ.setdefault("GOOGLE_APPLICATION_CREDENTIALS", env_value)
         file_exists = os.path.exists(os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", ""))
