@@ -62,7 +62,7 @@
 
         analyser.fftSize = 256;
         analyser.smoothingTimeConstant = 0.2;
-        
+
         const bufferLength = analyser.frequencyBinCount;
         const dataArray = new Uint8Array(bufferLength);
         const mouth = document.getElementById("avatar-mouth");
@@ -78,7 +78,7 @@
             mouth.style.height = '45px';
         }
         
-        mouth.style.transition = 'height 0.05s ease'; // Faster transition
+        mouth.style.transition = 'height 0.03s ease';
             requestAnimationFrame(animate);
         }
         animate();
