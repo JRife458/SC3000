@@ -23,6 +23,8 @@ RUN pip install -r requirements.txt --progress-bar off
 # This will include your SC3000 folder (which contains manage.py and your project).
 COPY . /app/
 
+RUN python SC3000/manage.py collectstatic --noinput
+
 # Run database migrations.
 # This command runs at build time, so the SQLite database will be pre-seeded.
 RUN python SC3000/manage.py migrate
