@@ -12,7 +12,7 @@ ENV PYTHONPATH=/app/SC3000
 # Set the working directory in the container to /app.
 WORKDIR /app
 
-ENV GOOGLE_APPLICATION_CREDENTIALS=/app/SC3000/google_api.json
+# ENV GOOGLE_APPLICATION_CREDENTIALS=/app/SC3000/google_api.json
 
 # Copy the requirements file into the container
 COPY requirements.txt /app/
