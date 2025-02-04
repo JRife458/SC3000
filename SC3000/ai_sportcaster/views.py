@@ -8,6 +8,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
 import statsapi
+from .voice_layer import text_to_speech
+from django.conf import settings               # <-- import settings
 
 # @require_POST
 # def summarize_game(request):
@@ -77,3 +79,28 @@ class SummarizeGameView(LoginRequiredMixin, TemplateView):
         context["summary"] = summary
 
         return context
+
+@require_POST
+def speak_text(request):
+    """
+    Accepts a POST request with 'text' parameter,
+    calls text_to_speech to generate an MP3, and returns the file path (or direct file).
+    """
+    # 1. Get the text to speak from the POST data
+    text = request.POST.get("text", "Hello, this is a default message.")
+
+    # 2. Generate the MP3 file
+    filename = text_to_speech(text, output_filename="summary_audio.mp3")
+
+    audio_url = f"{settings.MEDIA_URL}{filename}"
+
+    # 3. Return a JSON response with the filename OR
+    #    return the file itself. Let's do a JSON response for now.
+    return JsonResponse({
+        "message": "Text-to-speech completed",
+        # "filename": filename
+        "audio_url": audio_url
+    })
+
+def tts_test_page(request):
+    return render(request, 'ai_sportcaster/tts_test.html')

@@ -1,0 +1,58 @@
+<!-- ai_sportcaster/templates/ai_sportcaster/tts_test.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Google Text-to-Speech</title>
+</head>
+<body>
+    <h1>Google Text-to-Speech Test</h1>
+    <form method="POST" onsubmit="speakText(event)">
+        {% csrf_token %}
+        <label for="text-to-say">Enter text to speak:</label>
+        <br/>
+        <textarea id="text-to-say" name="text" rows="4" cols="50">Hello, World!</textarea>
+        <br/>
+        <button type="submit">Speak</button>
+    </form>
+
+    <div id="response"></div>
+    <audio id="audio-player" controls></audio>
+
+    <script>
+    function speakText(event) {
+        event.preventDefault(); // Prevent normal form submission
+
+        // Gather form data
+        const text = document.getElementById("text-to-say").value;
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        // Make a POST request using fetch with the namespaced URL
+        fetch("{% url 'ai_sportcaster:speak_text' %}", {
+            method: "POST",
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'text=' + encodeURIComponent(text)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            document.getElementById('response').innerText = data.message || data.error;
+            
+            // Automatically play the audio if the audio_url is returned.
+            if (data.audio_url) {
+                const audioPlayer = document.getElementById('audio-player');
+                audioPlayer.src = data.audio_url;
+                audioPlayer.play();
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            document.getElementById('response').innerText = "An error occurred.";
+        });
+    }
+    </script>
+</body>
+</html>
