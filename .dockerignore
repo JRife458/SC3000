@@ -1,0 +1,21 @@
+# Ignore environment files
+.env
+
+# Ignore Git repository
+.git/
+.gitignore
+
+# Ignore logs and temp files
+logs/
+*.log
+tmp/
+
+# Ignore dependencies (if rebuilding in the container)
+node_modules/
+__pycache__/
+
+# Ignore Docker metadata files
+.dockerignore
+Dockerfile
+
+google_api.json

@@ -4,7 +4,16 @@ from django.conf import settings
 from decouple import config
 
 def text_to_speech(text: str, output_filename="summary_audio.mp3") -> str:
-    os.environ.setdefault("GOOGLE_APPLICATION_CREDENTIALS", config("GOOGLE_APPLICATION_CREDENTIALS"))
+    env_value = config("GOOGLE_APPLICATION_CREDENTIALS")
+    os.environ.setdefault("GOOGLE_APPLICATION_CREDENTIALS", env_value)
+
+    # Print the values to see what's going on
+    # print("Value from config('GOOGLE_APPLICATION_CREDENTIALS'):", env_value)
+    # print("os.environ['GOOGLE_APPLICATION_CREDENTIALS']:", os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"))
+    
+    # Verify that the file exists
+    # file_exists = os.path.exists(os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", ""))
+    # print("Does the JSON file exist at that path?", file_exists)
 
     """
     Generates an MP3 file from the given text using Google TTS.
