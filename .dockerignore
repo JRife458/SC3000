@@ -1,5 +1,6 @@
 # Ignore environment files
 .env
+.envtemplate
 
 # Ignore Git repository
 .git/
