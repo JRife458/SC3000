@@ -40,7 +40,8 @@
   <div id="result">
     <p>{{summary}}
   </div>
-  <audio src={{audio}} id="audio-player" controls></audio>
+  {% comment %} <audio src={{audio}} id="audio-player" controls></audio> {% endcomment %}
+  <audio src="{{ audio }}" id="audio-player" controls autoplay></audio>
   <script>
     function setupLipSync(audioElement) {
         const audioCtx = new (window.AudioContext ||
