@@ -17,7 +17,8 @@ class UserLoginView(LoginView):
     template_name = "accounts/login.html"
     success_url = reverse_lazy("profile")
     def form_valid(self, form):
-        messages.success(self.request, f"Welcome {self.request.user.username}!")
+        user = form.get_user()
+        messages.success(self.request, f"Welcome {user.username}!")
         return super().form_valid(form)
 
     def form_invalid(self, form):
