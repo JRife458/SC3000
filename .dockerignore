@@ -1,6 +1,7 @@
 # Ignore environment files
-.env
-.envtemplate
+**/.env
+**/.envtemplate
+venv
 
 # Ignore Git repository
 .git/
@@ -12,11 +13,10 @@ logs/
 tmp/
 
 # Ignore dependencies (if rebuilding in the container)
-node_modules/
 __pycache__/
 
 # Ignore Docker metadata files
 .dockerignore
 Dockerfile
 
-google_api.json
+**/google_api.json
