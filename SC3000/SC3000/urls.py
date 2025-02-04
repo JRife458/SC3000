@@ -22,6 +22,6 @@ from django.conf import settings               # <-- import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('accounts/', include('accounts.urls')),
-    path('ai/', include('ai_sportcaster.urls')),
+    # path('ai/', include('ai_sportcaster.urls')),
     path('', include('router.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

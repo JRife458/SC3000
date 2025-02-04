@@ -7,10 +7,10 @@ def text_to_speech(text: str, output_filename="summary_audio.mp3") -> str:
     if config("ENVIRONMENT", default="prod") == 'dev':
         env_value = config("GOOGLE_APPLICATION_CREDENTIALS")
         os.environ.setdefault("GOOGLE_APPLICATION_CREDENTIALS", env_value)
-        print("Development mode: GOOGLE_APPLICATION_CREDENTIALS set to", os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"))
-    else:
-        print("Production mode: Using ADC provided by Cloud Run's service account.")
-    
+        # print("Development mode: GOOGLE_APPLICATION_CREDENTIALS set to", os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"))
+    # else:
+        # print("Production mode: Using ADC provided by Cloud Run's service account.")
+
     # Print the values to see what's going on
     # print("Value from config('GOOGLE_APPLICATION_CREDENTIALS'):", env_value)
     # print("os.environ['GOOGLE_APPLICATION_CREDENTIALS']:", os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"))
@@ -29,8 +29,9 @@ def text_to_speech(text: str, output_filename="summary_audio.mp3") -> str:
     # 2. Build the synthesis request
     synthesis_input = texttospeech.SynthesisInput(text=text)
     voice = texttospeech.VoiceSelectionParams(
-        language_code="en-US",
-        ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL
+        language_code="en-AU",
+        name="en-AU-Polyglot-1",
+        ssml_gender=texttospeech.SsmlVoiceGender.MALE
     )
     audio_config = texttospeech.AudioConfig(
         audio_encoding=texttospeech.AudioEncoding.MP3

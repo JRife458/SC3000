@@ -45,7 +45,7 @@ class UserProfileView(LoginRequiredMixin, FormView):
     template_name = "accounts/profile.html"
     queryset = Favorite_Teams.objects.all()
     form_class = FavoriteTeamsForm
-    success_url = reverse_lazy("profile")
+    success_url = reverse_lazy("games")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -76,7 +76,12 @@ class TeamGamesView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         fav_teams = Favorite_Teams.objects.filter(user_id=user.id)
+        if not fav_teams:
+            fav_teams = [Favorite_Teams.objects.create(user_id=user.id, team_id=1)]
         context["favorite_teams"] = fav_teams
+        language_pref = LanguagePreference.objects.get(user_id=user.id)
+        # if not language_pref:
+        #     language_pref = LanguagePreference.objects.create(user_id=user.id, language="EN")
         game_data = []
         for team in fav_teams:
             team_obj = Teams.objects.get(id=team.team_id)
@@ -111,8 +116,7 @@ class TeamGamesView(LoginRequiredMixin, TemplateView):
             game_obj["plays"] = highlights
             games.append(game_obj)
         context["games"] = games
-        language_pref = LanguagePreference.objects.get(user=user)
-        summary = get_gemini_summary(f"{games}", language_pref)
+        summary = get_gemini_summary(f"{games}", language_pref, user.first_name)
         context["summary"] = summary
         filename = text_to_speech(summary, output_filename="summary_audio.mp3")
         audio_url = f"{settings.MEDIA_URL}{filename}"

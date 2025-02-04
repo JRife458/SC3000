@@ -4,7 +4,7 @@ from decouple import config  # Import config from decouple
 from django.contrib.auth.models import User
 
 
-def get_gemini_summary(prompt: str, language: str) -> str:
+def get_gemini_summary(prompt: str, language: str, name: str) -> str:
     """
     This function configures the Gemini AI model using your API key,
     sends a prompt to generate content, and returns the summary text.
@@ -37,7 +37,7 @@ def get_gemini_summary(prompt: str, language: str) -> str:
     model = genai.GenerativeModel(
     model_name="gemini-1.5-flash-8b",
     generation_config=generation_config,
-    system_instruction=f"Act as a sportscaster in the {language_pref} language. I'm going to send a string of data from MLB games. Summarize it as excited as possible. This is the game object {game_obj}",
+    system_instruction=f"Create a script for sportscaster for Baseball in the {language_pref} language. Greet the listener by their name, {name}, and then introduce yourself as Sports Caster 3000.  I'm going to send a string of data from MLB games. Summarize it as excited as possible. This is the game object {game_obj}. Do not include any * in the script.",
     )
 
     # Generate content from the prompt

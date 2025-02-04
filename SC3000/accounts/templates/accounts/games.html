@@ -27,21 +27,31 @@
   }
 </style>
 <div class="container d-flex flex-column align-items-center">
-  <h1 class="display-1">Game Select</h1>
-  <h2>Favorite Teams:</h2>
-  <ul class="list-group-flush">
+  <h1 class="display-1">Summary</h1>
+  {% comment %} <h2>Favorite Teams:</h2> {% endcomment %}
+  {% comment %} <ul class="list-group">
     {%for team in favorite_teams%}
     <li class="list-group-item">{{team}}</li>
     {%endfor%}
-  </ul>
+  </ul> {% endcomment %}
   <div class="avatar-container">
     <div id="avatar-mouth"></div>
   </div>
-  <div id="result">
-    <p>{{summary}}
+  <audio class="mb-3" src="{{ audio }}" id="audio-player" controls autoplay></audio>
+  <div class="card">
+    <div class="card-header">
+      <h2 class="d-flex flex-column align-items-center">Favorite Teams:</h2>
+      <ul class="list-group d-flex flex-column align-items-center">
+        {%for team in favorite_teams%}
+        <li class="list-group-item">{{team}}</li>
+        {%endfor%}
+      </ul>
+    </div>
+    <div class="card-body">
+      <p class="card-text">{{summary}}
+    </div>
   </div>
   {% comment %} <audio src={{audio}} id="audio-player" controls></audio> {% endcomment %}
-  <audio src="{{ audio }}" id="audio-player" controls autoplay></audio>
   <script>
     function setupLipSync(audioElement) {
         const audioCtx = new (window.AudioContext ||
@@ -52,7 +62,7 @@
         source.connect(analyser);
         analyser.connect(audioCtx.destination);
 
-        analyser.fftSize = 256;
+        analyser.fftSize = 128;
         analyser.smoothingTimeConstant = 0.2;
         const bufferLength = analyser.frequencyBinCount;
         const dataArray = new Uint8Array(bufferLength);

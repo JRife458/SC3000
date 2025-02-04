@@ -34,8 +34,13 @@ class FavoriteTeamsForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if user:
             # language_preference = LanguagePreference.objects.get(user=user)
-            # Super hacky fix, creating a languagePreference object if none exists
-            language_preference, created = LanguagePreference.objects.get_or_create(user=user)
+
+            # # Super hacky fix, creating a languagePreference object if none exists
+            language_preference, created = LanguagePreference.objects.get_or_create(
+            user=user,
+            defaults={
+                'language': 'EN',
+            })
             self.fields['language'].initial = language_preference.language
             self.fields['teams'].initial = Favorite_Teams.objects.filter(user=user).values_list('team', flat=True)
 
